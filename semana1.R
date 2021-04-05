@@ -1,9 +1,17 @@
 ##### Semana 1 das Atividades de hugo###
 
+
+#Um summary do Banco
 summary(iris)
 
-#plots
+#plots do banco
 plot(iris)
 
-#esttrutura
+#estrutura do banco
 str(iris)
+
+
+
+#############OBJETOS E FUNÇÕES DO R ###############
+
+c <- c(2, 3, 4, 5, 6) # Criando o vetor c
