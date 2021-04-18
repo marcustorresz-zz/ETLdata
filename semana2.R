@@ -35,7 +35,7 @@ library(dplyr) # permite seguências
 ################## ATIVIDADES ####################
 
 
-##### Tipos de Objetos
+##### Tipos de Objetos########
 
 # vetor 
 
@@ -132,7 +132,7 @@ listaAlunos <- data.frame(
 listaAlunos
 
 str(listAlunos)
-##############Data Frame da Atividade ###########
+############## Atividade - Data Frame  ###########
 
 
 #vetor com o nome de árvores
@@ -158,6 +158,64 @@ listaArvore <- data.frame(
 
 listaArvore
 
-str(listAlunos)
+
+write.csv(listaArvore,"arvores.csv" ,row.names = FALSE)
+
+#################### Simulações e Sequências #######################################
+# É importante deixar claro que essa parte foi copiada do script do Professor Hugo,
+# disponível em: https://github.com/hugoavmedeiros/etl_com_r/blob/master/scripts/5_simulacoes_e_repeticoes_no_R.R 
 
 
+# set.seed() configura a semente aleatória de geração de dados. Isso permite com que os resultados se mantenham constantes
+# usando a função addTaskCallback deixamos a set.seed fixa, rodando no back
+
+tarefaSemente <- addTaskCallback(function(...) {set.seed(123);TRUE}) # atribui a tarefa à variável tarefaSemente
+#atribui a tarefa à variável aleatória
+tarefaSemente # chama a tarefaSemente
+
+# distribuição normal simulada
+distNormalSimulacao <- rnorm(100) # usa a função rnorm para criar uma distribuição normal, indicando o total de casos
+
+# a rnorm é a da memsa família da rbinom, que será vista abaixo. Para ver as outras, acesse o link https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/Distributions
+
+summary(distNormalSimulacao) # sumário da distNormalSimulacao
+
+# distribuição binomial simulada
+distBinominalSimulacao <- rbinom(100, 1, 0.7) # rbinom para criar distribuição binominal, indicando casos, tamanho e probabilidade
+
+?rbinom()
+# a sintaxe aqui mostra que o primeiro numero é a quantidade de vezes. o segundo o tamanho (no caso, 0 ou 1, e o ultimo a probabilidade de sucesso)
+distBinominalSimulacao
+# EM ML é normal colocar a probabilidade em 0.7
+
+
+# repetições, a função rep()
+classeSimulacao <- c(rep("Jovem", length(distBinominalSimulacao)/2), rep("Jovem Adulto", length(distBinominalSimulacao)/2)) # vetor repetindo a classe Jovem 15x e Jovem Adulto 15x
+
+# sequências
+
+indexSimulacao <- seq(1, length(distNormalSimulacao)) # vetor com índex dos dados, usando a função length para pegar o total de casos
+
+#Usar lenght é util para sempre referenciar o objeto anterior.
+
+
+
+# por fim, podemos usar a função removeTaskCallback para remover a tarefa que criamos lá em cima
+
+removeTaskCallback(tarefaSemente)
+
+
+############# Atividade - Simulações e Sequências #############
+
+?dnorm()
+
+#Criando uma variável nomrmal
+normal <- dnorm(4, mean = 0, sd = 1)
+
+#Agora uma binomial
+?dbinom() #nesse caso, a sintaxe é (n_quantiles, tamanho, probabilidade de ocorrer)
+binomial <- dbinom(5, 10, 0.9)
+
+#Variável de índice (?) Pelo que entendi, é um concatenado comum
+index <- c(1,2,3,4,5)
+index[-1] #Retorna todos menos o da primerra posição
