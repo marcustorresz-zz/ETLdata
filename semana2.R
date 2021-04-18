@@ -219,3 +219,78 @@ binomial <- dbinom(5, 10, 0.9)
 #Variável de índice (?)
 index <- c(1,2,3,4,5)
 index[-1] #Retorna todos menos o da primeira posição
+
+
+
+
+
+############### Bootstraping ##########
+# É importante deixar claro que essa parte foi copiada do script do Professor Hugo,
+# disponível em: https://github.com/hugoavmedeiros/etl_com_r/blob/master/scripts/6_amostragem_e_boostrapping.R
+
+#OBJETIVO: NÃO ENVIESAMENTO DO MODELO DE MACHINHE LEARNING 
+
+# amostragem sem reposição usando função sample
+#15 é o numero de casos da amostra
+sample(distNormalSimulacao, 15, replace = FALSE) # se você não tiver o objeto distNormalSimulacao no seu ambiente, crie com o script anterior
+
+# amostragem com reposição usando função sample
+sample(distNormalSimulacao, 15, replace = TRUE)
+
+# bootstraping com função replicate
+set.seed(412) # agora, não vamos mais usar como tarefa mas como execução ponto a ponto
+
+#Replicar a amostra 10 vezes, com tamanho 10
+bootsDistNormal10 <- replicate(10, sample(distNormalSimulacao, 10, replace = TRUE)) # replicamos 10x a amostra, criando assim um bootstrapping
+bootsDistNormal10
+
+# calculando uma estatística com bootstrapping (10 amostras)
+mediaBootsNormal10 <-replicate(10, mean(sample(distNormalSimulacao, 10, replace = TRUE))) # calculamos a média de 10 amostras de 10 casos
+mediaBootsNormal50 <-replicate(50, mean(sample(distNormalSimulacao, 10, replace = TRUE))) # calculamos a média de 50 amostras de 10 casos
+mediaBootsNormal100 <-replicate(100, mean(sample(distNormalSimulacao, 10, replace = TRUE))) # calculamos a média de 100 amostras de 10 casos
+
+# vamos comparar???
+mean(mediaBootsNormal10) # media do boostraping 10
+mean(mediaBootsNormal50) # media do boostraping 50
+mean(mediaBootsNormal100) # media do boostraping 100
+mean(distNormalSimulacao) # media dos dados originais
+
+# partições
+install.packages('caret', dependencies = T) # caret é um pacote geral de machine learning # se já tiver não, innstale =D
+library(caret)
+
+# primeiro, criamos as partições de dados
+particaoDistNormal <- createDataPartition(1:length(distNormalSimulacao), p=.7) # passamos o tamanho do vetor e o parâmetro de divisão
+
+treinoDistNormal <- distNormalSimulacao[unlist(particaoDistNormal)] # criamos uma partição para treinar os dados, usando a partição anterior. Atenção: o comando unlist é muito usado para transformar uma lista num vetor
+
+testeDistNormal <- distNormalSimulacao[- unlist(particaoDistNormal)] # criamos uma partição para testar os dados, usando a partição anterior. Atenção: o comando unlist é muito usado para transformar uma lista num vetor
+
+
+############### Atividade - Bootstraping #########
+
+
+#Criando um sample de 10 casos
+
+sample(distNormalSimulacao, 10, replace = FALSE)
+
+#Manter o seed 
+set.seed(412)
+
+#Usando a função replicate 100 vezes, do sample de 5
+bootsDistNormal100 <- replicate(100, sample(distNormalSimulacao, 5, replace = TRUE)) # replicamos 10x a amostra, criando assim um bootstrapping
+bootsDistNormal100
+
+# calculando uma estatística com bootstrapping  (5 amostras)
+mediaBootsNormal10 <-replicate(10, mean(sample(distNormalSimulacao, 5, replace = TRUE))) # calculamos a média de 10 amostras de 10 casos
+mediaBootsNormal100 <-replicate(100, mean(sample(distNormalSimulacao, 5, replace = TRUE))) # calculamos a média de 50 amostras de 10 casos
+mediaBootsNormal1000 <-replicate(1000, mean(sample(distNormalSimulacao, 5, replace = TRUE))) # calculamos a média de 100 amostras de 10 casos
+
+# Comparando
+mean(mediaBootsNormal10) # media do boostraping 10
+mean(mediaBootsNormal100) # media do boostraping 100
+mean(mediaBootsNormal1000) # media do boostraping 1000
+mean(distNormalSimulacao) # media dos dados originais
+
+
+
