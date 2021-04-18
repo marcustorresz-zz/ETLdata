@@ -132,5 +132,32 @@ listaAlunos <- data.frame(
 listaAlunos
 
 str(listAlunos)
+##############Data Frame da Atividade ###########
+
+
+#vetor com o nome de árvores
+nomeArvore <- c("Umbu", "Jacaranda", "Pau-Ferro", "Baobá","Pau-Brasil","Jaqueira")
+
+#vetor com datas de plantio
+nascimentoArvore <- as.Date(c("1920-11-02","1932-02-12",
+                             "1967-02-01","1956-04-05",
+                             "1948-05-23","1958-12-09"))
+
+#vetor com as idades
+today <- as.Date(Sys.Date(), format='%d/%m/%y')
+
+idadeArvore <- year(today) - year(nascimentoArvore) 
+
+
+
+listaArvore <- data.frame(
+  nomeArvore = nomeArvore,
+  dataNasc = nascimentoArvore,
+  idade = idadeArvore
+)
+
+listaArvore
+
+str(listAlunos)
 
 
