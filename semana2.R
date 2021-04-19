@@ -293,4 +293,355 @@ mean(mediaBootsNormal1000) # media do boostraping 1000
 mean(distNormalSimulacao) # media dos dados originais
 
 
+##################### CALCULANDO ################
+# É importante deixar claro que essa parte foi copiada do script do Professor Hugo,
+# disponível em: https://github.com/hugoavmedeiros/etl_com_r/blob/master/scripts/6_amostragem_e_boostrapping.R
 
+# o R como calculadora
+
+#Na distribuição binomial, as probabilidades são independentes e constantes. Cada tentativa é uma prova de Bernoulli (somente podem ocorrer dois possiveis resultados)
+# Foco no sucesso obtidos em n tentativas
+binomialnegSimulacao <- rnbinom(300, mu = 3, size = 10) #300 casos,dispersão de 3 e tamanho de 10 
+binomialnegSimulacao
+
+
+#Na distribuição de poission, a probabilidade de um evento ocorrer é independente e a mesma 
+# do ultimo que ocorreu.
+# foco no numero de sucessos durante um intervalo continuo
+poissonSimulacao <- rpois(300, 3)
+poissonSimulacao
+
+
+hist(binomialnegSimulacao)
+hist(poissonSimulacao)
+
+binomialnegSimulacao + poissonSimulacao # soma as distribuições
+
+poissonSimulacao + 100 # soma 100 a cada elemento
+
+poissonSimulacao^2 # eleva ao quadrado
+
+poissonSimulacao * binomialnegSimulacao # multiplica
+
+round(distNormalSimulacao, 0) # arredonda o vetor para inteiros
+
+ceiling(distNormalSimulacao) # arredonda para cima
+
+floor(distNormalSimulacao) # arredonda para baixo
+
+distNormalSimulacao %% poissonSimulacao # módulo dos vetores
+
+# também podemos usar funções estatísticas no R
+
+# média
+mean(poissonSimulacao)
+mean(binomialnegSimulacao)
+
+# mediana
+median(poissonSimulacao)
+median(binomialnegSimulacao)
+
+# desvio padrão
+sd(poissonSimulacao)
+sd(binomialnegSimulacao)
+
+# variância
+var(poissonSimulacao)
+var(binomialnegSimulacao)
+
+# uma aplicação prática?? vamos centralizar (normalizar) a nossa simulação poisson
+poissonSimulacaoCentral <- poissonSimulacao - mean(poissonSimulacao)
+hist(poissonSimulacao)
+hist(poissonSimulacaoCentral)
+
+
+################# Atividade - Calculando ##############
+
+#Rodar 100 números aleatórios de 1 a 10
+normal <- runif(100, 1, 10)
+normal
+
+#Tentar normalizar pela média
+Normal <- normal - mean(normal)
+Normal
+
+#gráfico comparando os dois
+par(mfrow=c(1,2))
+hist(normal)
+hist(Normal)
+
+
+################# INDEXAÇÃO #####################
+# É importante deixar claro que essa parte foi copiada do script do Professor Hugo,
+# disponível em: https://github.com/hugoavmedeiros/etl_com_r/blob/master/scripts/8_indexacao.R
+
+
+# vetores
+poissonSimulacao[1] # acessa o primeiro elemento
+poissonSimulacao[c(1:10, 15)] # acessa os elementos 1, 2 até 10 e 15
+
+# matrizes
+matrix1[1, ] # linha 1
+matrix1[ ,1] # coluna 1
+matrix1[1,1] # linha 1, coluna 1
+
+# data.frames
+iris$Species # retorna apenas a coluna species do data.frame iris
+
+iris[ , 5] # retorna todas as linhas apenas a coluna species do data.frame iris
+
+iris[1:10, 2:5] # retorna as 10 primeiras linhas das colunas 2 a 5 do data.frame iris
+
+iris[, 'Species'] # retorna a coluna espécies, indexada pelo nome
+
+iris[, 'Species', drop = FALSE] # retorna a coluna espécies, indexada pelo nome, em formato de coluna
+
+iris[ , -5] # retorna todas as colunas, menos a 5 - espécies
+
+# listas, todos com a mesmo objetivo
+regCarros$coefficients
+regCarros$coefficients[1] #apenas o primeiro coeficiente
+regCarros[['coefficients']][1]
+regCarros[[1]][1]
+
+# usando operadores lógicos
+a <- 5
+b <- 7
+c <- 5
+
+a < b
+a <= b
+a > b
+a >= b
+a == b
+a != b
+
+a %in% c(b, c) # a é igual a 5
+a == c & a < b
+a != c | a > b
+xor(a != c, a < b) #ou EXCLUSIVO (ou ou)
+!a != c
+any(a != c, a < c, a == c) # qualquer condição é vdd?
+all(a != c, a < c, a == c) # todas as condiçoes sao vdd?
+
+# operadores lógicos na prática
+iris$Sepal.Length <= 0 # testa se os valores na sepal.length são menores ou iguais a 0 
+
+iris$Sepal.Length >= 0 & iris$Sepal.Width <= 0.2 # testa se, numa dada linha, os valores na sepal.length são menores ou iguais a 0 OU se os valores em sepal.width são iguais ou menores que 0.2
+
+which(iris$Sepal.Length <= 5) # a função which mostra a posição (as linhas) em que a condição é atendida
+
+match(iris$Species, 'setosa') # também é possível usar a função match para encontrar a correspondência entre dados ou objetos
+
+
+############################# Atividade - Indexação ####################
+
+#Aqui, vou usar o df airquality do R
+
+airquality
+
+airquality$Ozone #retornar a variável Ozone
+airquality[,1] #Outra maneira de retornar a variável Ozone, que está na posição 1
+airquality[1,] #Retorna a primeira linha
+airquality[1:3,1:3] #retorna um 3x3
+airquality[, 'Wind'] #retorna nominalmente a variable Wind
+
+#Operadores lógicos
+
+airquality$Wind > 0 #retorna uma boolean de todos os casos se são maiores que 0 ou não
+
+airquality$Wind == 10.3 #ou se é igual a um número
+
+airquality$Wind == 10.3 & airquality$Month == 10 #ou se é de algum mes e igual ao numero
+airquality$Wind == 10.3 | airquality$Month == 10 #ou um ou outro
+xor(airquality$Wind == 10.3,airquality$Month == 10) #ou exclusivo
+any(airquality$Wind == 10.3,airquality$Month == 10) # se há algum que possui
+all(airquality$Wind == 10.3,airquality$Month == 10) # se todos possuem
+10.3 %in% airquality$Wind # se esse numero está contido
+
+
+
+################# ESTRUTURAS DE CONTROLE #####################
+# É importante deixar claro que essa parte foi copiada do script do Professor Hugo,
+# disponível em: https://github.com/hugoavmedeiros/etl_com_r/blob/master/scripts/9_estruturas_de_controle.R
+
+
+
+#estrutura condicional
+
+x <- runif(1, 0, 5)  #criar um caso entre 0 e 5 num modelo uniforme
+x
+
+if(x > 3) {
+  y <- 5
+} else {
+  y <- 0
+}
+y
+
+# avaliação condicional simples
+irisCopia <- as.data.frame(iris)
+irisCopia$SpeciesDummy <- ifelse(irisCopia$Species == 'setosa', 1, 0)
+
+# estrutura de repetição
+par(mfrow = c(2, 2)) # prepara a tela de gráficos como uma matriz 2x2 para receber os 4 gráficos gerados abaixo
+
+for (i in 1:4) { # cria o loop, que deve ir de 1 a 4
+  x <- iris[ , i] # atribui as colunas da base de dados a uma variável temporária
+  hist(x,
+       main = paste("Variável", i, names(iris)[i]), # atribui o nome ao gráfico de forma incremental, passando coluna por coluna
+       xlab = "Valores da Variável", # rótulo do eixo x
+       xlim = c(0, 10)) # limite mínimo e máximo do eixo x
+}
+
+#o lapply faz o mesmo
+lapply(iris[, 1:4], hist)
+
+
+################## Atividade - Estruturas de Controle #########
+
+# Ainda usando o df airquality, primeiro farei uma condicional e depois uma repetição
+
+airquality$tempMean <- ifelse(airquality$Temp > mean(airquality$Temp), "hot", "cold") #Aqui, quero saber se o dia foi mais quente que a média.
+airquality$tempMean
+
+#criando o histograma com repetição
+par(mfrow = c(2, 2))
+
+
+for (i in 1:4) { 
+  x <- airquality[ , i] #Pega cada coluna de 1 a 4
+  hist(x,
+       main = paste("Histograma de", names(airquality)[i]), #Adeque a legenda como necessário
+       xlab = "Valores" 
+    )
+}
+
+
+
+
+
+
+################  FUNÇOES #####################
+# É importante deixar claro que essa parte foi copiada do script do Professor Hugo,
+# disponível em: https://github.com/hugoavmedeiros/etl_com_r/blob/master/scripts/10_funcoes.R
+
+# função
+f <- function() {
+  cat("Hello, world!\n")
+}
+f()
+
+# função com estrutura de repetição
+f <- function(nro) {
+  for(i in 1:nro) {
+    cat("Hello, world!\n")
+  }
+}
+f(3)
+
+# função com estrutura condicional e de repetição
+f <- function(nro) {
+  if(nro < 100) {
+    for(i in 1:nro) {
+      cat("Hello, world!\n")
+    }
+  } else {
+    cat("Tá de brincadeira imprimir isso tudo")
+  }
+}
+f(99)
+f(100)
+
+# agora, uma função mais útil...
+centralizacao <- function(x) {
+  x <- x - mean(x)
+  return(x) #o return serve para retornar a função mesmo 
+}
+
+centralizacao(irisCopia$Sepal.Length)
+
+centralizacao <- function(x) {
+  x <- x - mean(x)
+}
+
+centralizacao(irisCopia$Sepal.Length)
+centroTeste <- centralizacao(irisCopia$Sepal.Length)
+
+
+
+
+########################### Atividade - Funções ####################
+
+
+calor <- function(x){
+  if (x > 23 ) {
+    for(i in 1:4) {
+      plot(airquality[,i])
+    }
+} else {
+  for(i in 1:4) {
+  plot(iris[,i])
+}}
+}
+
+calor(20)
+calor(40)
+
+
+rm(list=ls())
+
+################  FUNÇÕES DE REPETIÇÃO - APPLY  #####################
+# É importante deixar claro que essa parte foi copiada do script do Professor Hugo,
+# disponível em: https://github.com/hugoavmedeiros/etl_com_r/blob/master/scripts/11_funcoes_de_repeticao.R
+
+
+# funções de repetição - família apply
+
+# média de cada variável do data frame iris
+apply(iris[ ,-5], 2, mean) # iris[,-5] retira a última coluna, que não é numérica. no segundo parâmetro, 
+                          # o 2 indica que queremos a média das colunas. 
+lapply(iris[, -5], mean) # Cria uma lista. A sintaxe é mais simples, pois não precisa especificar se é coluna ou linha
+sapply(iris[, -5], mean) # Gera o resultado como verto . Mesma sintaxe, sendo a principal diferença que a sapply sempre tenta simplificar o resultado. 
+                          #Há uma aplicação de forma vetorizada
+
+par(mfrow = c(2, 2)) # prepara a área de plotagem para receber 4 plots
+
+sapply(iris[ , 1:4], hist)
+mapply(hist, iris[ , 1:4], MoreArgs=list(main='Histograma', xlab = 'Valores', ylab = 'Frequência')) # mapply tem a vantagem de aceitar argumentos da função original
+
+for (i in 1:4) { # cria o loop, que deve ir de 1 a 4
+  x <- iris[ , i] # atribui as colunas da base de dados a uma variável temporária
+  hist(x,
+       main = names(iris)[i], # atribui o nome ao gráfico de forma incremental, passando coluna por coluna
+       xlab = "Valores da Variável", # rótulo eixo x
+       ylab = 'Frequência', # rótulo eixo y
+       xlim = c(min(iris[, i]), max(iris[, i]))) # limites do eixo x
+}
+
+########### Atividade - Funções de Repetição #####
+
+#Vou usar o banco airquality
+
+apply(airquality,2,mean, is.na = F) # a média das variáveis
+sapply(airquality,mean) # a média das variáveis de outra maneira
+
+#### Graficos de Histograma
+
+
+# Unsando sapply
+sapply(airquality[,1:4], hist)
+
+#usando mapply
+mapply(hist, airquality[ , 1:4], MoreArgs=list(main='Histograma', xlab =  'Valor', ylab = 'Número de casos')) 
+
+
+#Usando for
+for (i in 1:4) { 
+  x <- airquality[ , i] 
+  hist(x,
+       main = paste("Histograma de", names(airquality)[i]), #Adeque a legenda como necessário
+       xlab = "Valores" 
+
+  )
+}
