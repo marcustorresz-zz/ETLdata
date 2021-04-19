@@ -36,9 +36,9 @@ set.seed(12) #configurando a semente
 #Uma maneira é usando a função
   
   f <- function(n) {
-    if(n < 3) {
+    if(n < 3) { 
       for(i in 1:n) {
-      x <-  df[,i] - mean(df[,i])
+      x <-  df[,i] - mean(df[,i]) #faz o cálculo
         return(x)
       }
     } else {
