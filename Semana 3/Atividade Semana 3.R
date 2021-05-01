@@ -27,7 +27,7 @@ set.seed(12) #configurando a semente
   )
   
 
-  rm(list = setdiff(ls(), "df")) # retirar todos menos o df
+  #rm(list = setdiff(ls(), "df")) # retirar todos menos o df
 
 # As variáveis (normais, contagem e binomial) devem ser simuladas!!! ok
   
