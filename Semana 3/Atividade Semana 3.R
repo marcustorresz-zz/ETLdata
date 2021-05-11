@@ -61,6 +61,16 @@ normal2 <- df$normal2 - mean(df$normal2)
 #3. Troque os zeros (0) por um (1) nas variáveis de contagem. 
   ifelse(df$binomial == 0,1,1)
   ifelse(df$negbinomial == 0,1,1)
+  
+  #ou 
+  
+#zeros <- funtion(x){
+  
+ # x <- ifelse(x ==0,1,x)
+#}
+
+#df[, 3,4] <- sapply(df[ , 3:4], zeros)
+  
 
   #4. Crie um novo data.frame com amostra (100 casos) da base de dados original. 
 ??sample
