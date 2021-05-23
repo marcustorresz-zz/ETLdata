@@ -1,6 +1,6 @@
 ########################## SEMANA 6 ###########################
 ########################### SMALL E LARGE DATA #################
-
+rm(list=ls())
 
 if (!require('ff')) install.packages('ff'); library('ff')
 if (!require('ffbase')) install.packages('ffbase'); library('ffbase')
@@ -25,6 +25,9 @@ largeData = data.table(a=rpois(casos, 3),
                        g=rnorm(casos)
 )
 
+
+
+
 object.size(largeData) # retorna o tamanho do objeto
 
 head(largeData) # vê as primeiras linhas
@@ -33,7 +36,7 @@ write.table(largeData,"bases_originais/largeData.csv",sep=",",row.names=FALSE,qu
 
 # versão menor
 
-casos= 9e6 # reduza os números antes e depois do e, caso esteja difícil de computar # mas tente manter pelo menos 1e6, para garantir o efeito se large data
+casos= 1e6 # reduza os números antes e depois do e, caso esteja difícil de computar # mas tente manter pelo menos 1e6, para garantir o efeito se large data
 
 # cria o data.frame com o total de casos definido acima
 largeData1 = data.table(a=rpois(casos, 3),

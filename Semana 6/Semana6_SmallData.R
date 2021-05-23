@@ -9,12 +9,16 @@ enderecoBase <- "bases_originais/propostas.csv"
 
 rm(list=ls())
 
+if (!require('ff')) install.packages('ff'); library('ff')
+
 if(!require(remotes)) install.packages("remotes")
 remotes::install_github("meirelesff/siconvr")
 
 library(siconvr)
 
 system.time (propostas <- get_siconv("propostas"))
+
+object.size(propostas)
 
 write.csv(propostas, "bases_originais/propostas.csv")
 
