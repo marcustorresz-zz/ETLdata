@@ -7,6 +7,7 @@ if (!require("dplyr")) install.packages('dplyr'); library('dplyr')
 if (!require("tidyr")) install.packages('tidyr'); library('tidyr')
 if (!require("reshape2")) install.packages('reshape2'); library('reshape2')
 if (!require("fuzzyjoin")) install.packages('fuzzyjoin'); library('fuzzyjoin')
+if (!require("lubridate")) install.packages('lubridate'); library('lubridate')
 
 
 #Baixa a base de case
@@ -36,12 +37,20 @@ head(pop)
 geral$semana_epidemio <- round(difftime(geral$dt_notificacao, "2019-12-29", units = "weeks"),0)
 geral$tempo_obito <- round(difftime(geral$dt_notificacao, geral$dt_obito, units = "days"),0)
 
+#Outra maneira é usando o epiweek
+class(geral$dt_notificacao)
+geral$epiweek <- epiweek(geral$dt_notificacao) #Usando epiweek
+
+
+
 geral$obito <- ifelse(geral$tempo_obito >= 0, 1,0 ) # se houver uma data de óbito, mesmo com 0 dias, ele vai pegar
 geral$obito[is.na(geral$obito)] <- 0
 geral$obito_teste <- ifelse(geral$evolucao == "OBITO",1,0) #teste para ver se tem algum outlier
 
-table(geral$classe)
+table(geral$evolucao)
 head(geral)
+
+
 
 #Ver os casos confirmados
 geral$confirmados <- ifelse(geral$classe == "CONFIRMADO",1,0) #teste para ver se tem algum outlier
@@ -52,7 +61,8 @@ geral$confirmados <- ifelse(geral$classe == "CONFIRMADO",1,0) #teste para ver se
 #por município a cada semana epidemiológica.
 
 semana <- geral %>% 
-              group_by(municipio, semana_epidemio) %>% 
+              group_by(municipio, epiweek) %>%  #Merge por semana e municipio
+              #Soma dos casos e calculo de incidencia e letalidade
               summarise(casos = n(), confirmados = sum(confirmados),  incidencia  = sum(confirmados)/100000, obitos = sum(obito), letalidade = sum(obito)/100000)  
 
 
